@@ -8,11 +8,16 @@ from pymatgen.io.ase import AseAtomsAdaptor
 from pymatgen.core.structure import Structure
 from ase.build import make_supercell
 
-def generate_deformed_strutures(atoms_object,norm_strains = [0.01, 0.025], shear_strains = [0.032, 0.02]):
+def generate_deformed_strutures(atoms_object, norm_strains = [0.01, 0.025], shear_strains = [0.032, 0.02], write_strain=True):
+
     eq_structure = atoms_object
     structure = AseAtomsAdaptor.get_structure(eq_structure)
+
     deformations: list[Deformation] = []
     deformed_struct: list[Structure] = []
+
+    charges = atoms_object.get_initial_charges()
+    moments = atoms_object.get_initial_magnetic_moments()
 
     strain_list = []
     for ind in [(0, 0), (1, 1), (2, 2)]:
@@ -25,7 +30,33 @@ def generate_deformed_strutures(atoms_object,norm_strains = [0.01, 0.025], shear
             strain = Strain.from_index_amount(ind, amount)
             strain_list.append(strain)
             deformations.append(strain.get_deformation_matrix())
-    return structure, deformations
+
+    if write_strain:
+        strain_tensor = np.array(strain_list)
+        with open('strain_tensor.pkl', 'wb') as fp:
+            pickle.dump(strain_tensor, fp)
+
+    return eq_structure, structure, deformations
+
+def create_files_and_directories(eq_structure, structure, deformations, charges, moments):
+    deformed_struct = [defo.apply_to_structure(structure) for defo in deformations]
+
+    for i, def_struc in enumerate(deformed_struct):
+        dir_no = i + 1
+        directory = f'defor_{dir_no}'
+        parent_dir = os.getcwd()
+        path_final = os.path.join(parent_dir, directory)
+        if os.path.exists(path_final):
+            shutil.rmtree(path_final)
+        os.mkdir(path_final)
+        atoms = AseAtomsAdaptor.get_atoms(def_struc)
+        eq_structure.set_cell(atoms.get_cell(), scale_atoms=True)
+
+        ase_atoms_eq.write('geometry.in')
+        os.chdir(home)
+        shutil.copyfile(f'{home}/input.py', f'defor_{dir_no}/input.py')
+        shutil.copyfile(f'{home}/submission.script', f'defor_{dir_no}/submission.script')
+
 
 
 
