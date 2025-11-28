@@ -14,10 +14,6 @@ def generate_deformed_strutures(atoms_object, norm_strains = [0.01, 0.025], shea
     structure = AseAtomsAdaptor.get_structure(eq_structure)
 
     deformations: list[Deformation] = []
-    deformed_struct: list[Structure] = []
-
-    charges = atoms_object.get_initial_charges()
-    moments = atoms_object.get_initial_magnetic_moments()
 
     strain_list = []
     for ind in [(0, 0), (1, 1), (2, 2)]:
@@ -38,11 +34,12 @@ def generate_deformed_strutures(atoms_object, norm_strains = [0.01, 0.025], shea
 
     return eq_structure, structure, deformations
 
-def create_files_and_directories(eq_structure, structure, deformations, charges, moments):
+def create_files_and_directories(eq_structure, structure, deformations):
     deformed_struct = [defo.apply_to_structure(structure) for defo in deformations]
 
     for i, def_struc in enumerate(deformed_struct):
         dir_no = i + 1
+        eq_structure_copy = eq_structure.copy()
         directory = f'defor_{dir_no}'
         parent_dir = os.getcwd()
         path_final = os.path.join(parent_dir, directory)
@@ -50,12 +47,10 @@ def create_files_and_directories(eq_structure, structure, deformations, charges,
             shutil.rmtree(path_final)
         os.mkdir(path_final)
         atoms = AseAtomsAdaptor.get_atoms(def_struc)
-        eq_structure.set_cell(atoms.get_cell(), scale_atoms=True)
-
-        ase_atoms_eq.write('geometry.in')
-        os.chdir(home)
-        shutil.copyfile(f'{home}/input.py', f'defor_{dir_no}/input.py')
-        shutil.copyfile(f'{home}/submission.script', f'defor_{dir_no}/submission.script')
+        eq_structure_copy.set_cell(atoms.get_cell(), scale_atoms=True)
+        eq_structure_copy.write(path_final + '/geometry.in')
+        shutil.copy(parent_dir + '/input.py', path_final + '/input.py')
+        shutil.copy(parent_dir + '/submission.script', path_final + '/submission.script')
 
 
 
