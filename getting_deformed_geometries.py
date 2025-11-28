@@ -1,16 +1,35 @@
 import os
 import shutil
 from ase.io import read, write
-from ase import Atoms
-import random
 import pickle
-from operator import itemgetter
 import numpy as np
-from pymatgen.analysis.elasticity import strain, Strain, Deformation
+from pymatgen.analysis.elasticity import Strain, Deformation
 from pymatgen.io.ase import AseAtomsAdaptor
-from pymatgen.analysis.elasticity import stress
 from pymatgen.core.structure import Structure
 from ase.build import make_supercell
+
+def generate_deformed_strutures(atoms_object,norm_strains = [0.01, 0.025], shear_strains = [0.032, 0.02]):
+    eq_structure = atoms_object
+    structure = AseAtomsAdaptor.get_structure(eq_structure)
+    deformations: list[Deformation] = []
+    deformed_struct: list[Structure] = []
+
+    strain_list = []
+    for ind in [(0, 0), (1, 1), (2, 2)]:
+        for amount in norm_strains:
+            strain = Strain.from_index_amount(ind, amount)
+            strain_list.append(strain)
+            deformations.append(strain.get_deformation_matrix())
+    for ind in [(0, 1), (0, 2), (1, 2)]:
+        for amount in shear_strains:
+            strain = Strain.from_index_amount(ind, amount)
+            strain_list.append(strain)
+            deformations.append(strain.get_deformation_matrix())
+    return structure, deformations
+
+
+
+
 
 ''' -------------------------------------------------------------------------------------------------------'''
 
