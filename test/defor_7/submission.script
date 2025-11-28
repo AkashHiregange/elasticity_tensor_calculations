@@ -1,0 +1,40 @@
+#!/bin/bash --login
+#PBS -N elasticity_spe
+
+# Select 1 nodes (maximum of 64 cores)
+#PBS -l select=2:ncpus=64
+#PBS -l walltime=24:00:0
+
+# Use the ARM nodes
+#PBS -q arm 
+
+module switch PrgEnv-cray PrgEnv-gnu
+module load craype-arm-thunderx2
+module load cray-python/3.7.3.2
+# Necessary for catlearn to load
+module load cray-hdf5/1.10.2.0
+
+. /home/ca-alogsdail/venv/fhi-aims/bin/activate
+export PYTHONPATH=/home/ca-alogsdail/github/:$PYTHONPATH
+
+# FHI-aims build version
+export VERSION=230612
+
+# Move to directory that script was submitted from
+export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)
+export OMP_NUM_THREADS=1
+cd $PBS_O_WORKDIR
+
+env
+
+more $PBS_NODEFILE
+echo ""
+
+export NPROCS=`wc -l $PBS_NODEFILE | awk '{print $1}'`
+
+echo $NPROCS
+
+#aprun -n $NPROCS /home/ca-alogsdail/fhi-aims-gnu/bin/aims.$VERSION.scalapack.mpi.x > test_output.log.$PBS_JOBID
+
+time python3 input.py > test_output.log.$PBS_JOBID
+

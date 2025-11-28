@@ -4,4 +4,3 @@ phonopy_disp.yaml
 __pycache__/
 geometry*
 test_elasticity_calculation/
-test/
