@@ -52,8 +52,13 @@ def create_files_and_directories(eq_structure, structure, deformations):
         shutil.copy(parent_dir + '/input.py', path_final + '/input.py')
         shutil.copy(parent_dir + '/submission.script', path_final + '/submission.script')
 
+ase_atoms_eq = read('CoO_RS_NM_pri_Opt_rSCAN.traj')
+t = np.array([[-1, 1, 1],[1, -1, 1],[1, 1, -1]])
+ase_atoms_eq = make_supercell(ase_atoms_eq, t)
 
 
+eq_structure, structure, deformations = generate_deformed_strutures(atoms_object=ase_atoms_eq)
+create_files_and_directories(eq_structure, structure, deformations)
 
 
 
@@ -68,56 +73,56 @@ out the section below (until the next section starts) and use the section below 
 
 '''
 
-home = os.getcwd()
-
-ase_atoms_eq = read('CoO_RS_NM_pri_Opt_rSCAN.traj')
-t = np.array([[-1, 1, 1],[1, -1, 1],[1, 1, -1]])
-ase_atoms_eq = make_supercell(ase_atoms_eq, t)
-
-structure = AseAtomsAdaptor.get_structure(ase_atoms_eq)
-structure.add_oxidation_state_by_element({"Co": 0, "O": 0})
-
-norm_strains = [0.01, 0.025]
-shear_strains = [0.032, 0.02]
-deformations: list[Deformation] = []
-deformed_struct: list[Structure] = []
-
-strain_list = []
-for ind in [(0, 0), (1, 1), (2, 2)]:
-    for amount in norm_strains:
-        strain = Strain.from_index_amount(ind, amount)
-        # print(strain)
-        strain_list.append(strain)
-        deformations.append(strain.get_deformation_matrix())
-for ind in [(0, 1), (0, 2), (1, 2)]:
-    for amount in shear_strains:
-        strain = Strain.from_index_amount(ind, amount)
-        strain_list.append(strain)
-        # print(strain)
-        deformations.append(strain.get_deformation_matrix())
-
-deformed_struct = [defo.apply_to_structure(structure) for defo in deformations]
-# print(deformed_struct)
-strain_tensor = np.array(strain_list)
-with open('strain_tensor.pkl', 'wb') as fp:
-    pickle.dump(strain_tensor, fp)
-
-for def_struc in deformed_struct:
-    dir_no = deformed_struct.index(def_struc) + 1
-    try:
-        os.mkdir(f'defor_{dir_no}')
-    except Exception as e:
-        print(e)
-        shutil.rmtree(f'{os.getcwd()}/defor_{dir_no}')
-        os.mkdir(f'defor_{dir_no}')
-    os.chdir(f'defor_{dir_no}')
-    atoms = AseAtomsAdaptor.get_atoms(def_struc)
-    ase_atoms_eq.set_cell(atoms.get_cell(), scale_atoms=True)
-    from ase.visualize import view
-    ase_atoms_eq.write('geometry.in')
-    os.chdir(home)
-    shutil.copyfile(f'{home}/input.py', f'defor_{dir_no}/input.py')
-    shutil.copyfile(f'{home}/submission.script', f'defor_{dir_no}/submission.script')
+# home = os.getcwd()
+#
+# ase_atoms_eq = read('CoO_RS_NM_pri_Opt_rSCAN.traj')
+# t = np.array([[-1, 1, 1],[1, -1, 1],[1, 1, -1]])
+# ase_atoms_eq = make_supercell(ase_atoms_eq, t)
+#
+# structure = AseAtomsAdaptor.get_structure(ase_atoms_eq)
+# structure.add_oxidation_state_by_element({"Co": 0, "O": 0})
+#
+# norm_strains = [0.01, 0.025]
+# shear_strains = [0.032, 0.02]
+# deformations: list[Deformation] = []
+# deformed_struct: list[Structure] = []
+#
+# strain_list = []
+# for ind in [(0, 0), (1, 1), (2, 2)]:
+#     for amount in norm_strains:
+#         strain = Strain.from_index_amount(ind, amount)
+#         # print(strain)
+#         strain_list.append(strain)
+#         deformations.append(strain.get_deformation_matrix())
+# for ind in [(0, 1), (0, 2), (1, 2)]:
+#     for amount in shear_strains:
+#         strain = Strain.from_index_amount(ind, amount)
+#         strain_list.append(strain)
+#         # print(strain)
+#         deformations.append(strain.get_deformation_matrix())
+#
+# deformed_struct = [defo.apply_to_structure(structure) for defo in deformations]
+# # print(deformed_struct)
+# strain_tensor = np.array(strain_list)
+# with open('strain_tensor.pkl', 'wb') as fp:
+#     pickle.dump(strain_tensor, fp)
+#
+# for def_struc in deformed_struct:
+#     dir_no = deformed_struct.index(def_struc) + 1
+#     try:
+#         os.mkdir(f'defor_{dir_no}')
+#     except Exception as e:
+#         print(e)
+#         shutil.rmtree(f'{os.getcwd()}/defor_{dir_no}')
+#         os.mkdir(f'defor_{dir_no}')
+#     os.chdir(f'defor_{dir_no}')
+#     atoms = AseAtomsAdaptor.get_atoms(def_struc)
+#     ase_atoms_eq.set_cell(atoms.get_cell(), scale_atoms=True)
+#     from ase.visualize import view
+#     ase_atoms_eq.write('geometry.in')
+#     os.chdir(home)
+#     shutil.copyfile(f'{home}/input.py', f'defor_{dir_no}/input.py')
+#     shutil.copyfile(f'{home}/submission.script', f'defor_{dir_no}/submission.script')
 
     
 
