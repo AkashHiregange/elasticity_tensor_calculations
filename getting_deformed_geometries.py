@@ -10,6 +10,16 @@ from ase.build import make_supercell
 
 def generate_deformed_strutures(atoms_object, norm_strains = [0.01, 0.025], shear_strains = [0.032, 0.02], write_strain=True):
 
+
+    '''
+    :param atoms_object:
+    :param norm_strains: # TODOs: I remember that there was a certain minimum requirement on number of deformed
+    structures to compute the elasticity tensor. I will have to go through the documentation to see why is that!!
+    :param shear_strains:
+    :param write_strain:
+    :return:
+    '''
+
     eq_structure = atoms_object
     structure = AseAtomsAdaptor.get_structure(eq_structure)
 
