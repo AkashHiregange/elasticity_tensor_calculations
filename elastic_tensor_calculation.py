@@ -22,8 +22,9 @@ with open('strain_tensor.pkl', 'rb') as fp:
 def read_strain_tensor_from_pkl(pkl_file):
     with open(pkl_file, 'rb') as fp:
         strain_tensor = pickle.load(fp)
+    return strain_tensor
 
-def read_stress_from_outputs(aims_out_file=False,write_elasticity_tensor=True,write_output=True):
+def read_stress_from_outputs(aims_out_file=True):
     if aims_out_file:
         stress_list = []
         for defor in os.listdir():
@@ -64,44 +65,38 @@ def read_stress_from_outputs(aims_out_file=False,write_elasticity_tensor=True,wr
 
         return stress_tensor
 
-        # print(stress_tensor.shape)
-        # print(strain_tensor.shape)
-        elasticity_tensor = diff_fit(strain_tensor, stress_tensor, order=2)
-        print(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0] * 160.2716621)
 
-        if write_output:
-            try:
-                f = open('elasticity_tensor_calculation_output.txt', 'x')
-                f.close()
-            except:
-                print('The file already exists. Overwriting the file...')
+def compute_elasticity_tensor(strain_tensor,stress_tensor,write_elasticity_tensor=True,write_output=True):
+    elasticity_tensor = diff_fit(strain_tensor, stress_tensor, order=2)
+    print(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0] * 160.2716621)
 
-            f = open('elasticity_tensor_calculation_output.txt', 'w')
-            f.write(str(np.round(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0],3) * 160.2176621) + '\n')
-            f.write(str(np.round(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0],3)) + '\n')
-            f.write('Elasticity tensor in full. The above values show the unique values in the tensor.\n')
-            f.write(str(np.array(elasticity_tensor[0])) + '\n')
-            f.write('Stress tensor for all deformations in full. Shape is Nx3x3 where N is the number of deformations '
-                    'used to compute the elasticity tensor.\n')
-            f.write(str(stress_tensor)+'\n')
-            f.write(str(stress_tensor.shape)+'\n')
-            f.write('Strain tensor for all deformations in full. Shape is Nx3x3 where N is the number of deformations '
-                    'used to compute the elasticity tensor.\n')
-            f.write(str(strain_tensor)+'\n')
-            f.write(str(strain_tensor.shape)+'\n')
+    if write_output:
+        try:
+            f = open('elasticity_tensor_calculation_output.txt', 'x')
             f.close()
+        except:
+            print('The file already exists. Overwriting the file...')
 
-        if write_elasticity_tensor:
-            with open('elasticity_tensor.pkl', 'wb') as fp:
-                pickle.dump(np.array(elasticity_tensor[0]), fp)
+        f = open('elasticity_tensor_calculation_output.txt', 'w')
+        f.write(str(np.round(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0],3) * 160.2176621) + '\n')
+        f.write(str(np.round(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0],3)) + '\n')
+        f.write('Elasticity tensor in full. The above values show the unique values in the tensor.\n')
+        f.write(str(np.array(elasticity_tensor[0])) + '\n')
+        f.write('Stress tensor for all deformations in full. Shape is Nx3x3 where N is the number of deformations '
+                'used to compute the elasticity tensor.\n')
+        f.write(str(stress_tensor)+'\n')
+        f.write(str(stress_tensor.shape)+'\n')
+        f.write('Strain tensor for all deformations in full. Shape is Nx3x3 where N is the number of deformations '
+                'used to compute the elasticity tensor.\n')
+        f.write(str(strain_tensor)+'\n')
+        f.write(str(strain_tensor.shape)+'\n')
+        f.close()
+
+    if write_elasticity_tensor:
+        with open('elasticity_tensor.pkl', 'wb') as fp:
+            pickle.dump(np.array(elasticity_tensor[0]), fp)
+
+    return elasticity_tensor
 
 
-
-# elasticity_tensor =
-# print(elasticity_tensor[0])
-
-# ete = ElasticTensorExpansion(elasticity_tensor)
-# print(ete)
-# print(' ')
-# tec = ete.thermal_expansion_coeff(sdsgtructure, temperature=98.3)
 
