@@ -42,6 +42,7 @@ def read_stress_from_outputs(output_file_type=None,aims_out_file=False):
                 f'{file_ext}')
 
         stress_tensor = np.array(stress_list)
+
         return stress_tensor
 
     elif aims_out_file:

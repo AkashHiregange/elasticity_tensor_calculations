@@ -59,8 +59,8 @@ def create_files_and_directories(eq_structure, structure, deformations):
         atoms = AseAtomsAdaptor.get_atoms(def_struc)
         eq_structure_copy.set_cell(atoms.get_cell(), scale_atoms=True)
         eq_structure_copy.write(path_final + '/geometry.in')
-        shutil.copy(parent_dir + '/input.py', path_final + '/input.py')
-        shutil.copy(parent_dir + '/submission.script', path_final + '/submission.script')
+        #shutil.copy(parent_dir + '/input.py', path_final + '/input.py')
+        #shutil.copy(parent_dir + '/submission.script', path_final + '/submission.script')
 
 ase_atoms_eq = read('CoO_RS_NM_pri_Opt_rSCAN.traj')
 t = np.array([[-1, 1, 1],[1, -1, 1],[1, 1, -1]])
