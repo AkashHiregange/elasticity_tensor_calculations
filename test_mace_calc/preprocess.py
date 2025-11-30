@@ -35,8 +35,8 @@ from elastic_tensor_calculation import read_strain_tensor_from_pkl, read_stress_
 
 
 strain_tensor = read_strain_tensor_from_pkl('strain_tensor.pkl')
-stress_tensor = read_stress_from_outputs(output_file_type='.xyz', aims_out_file=False)
-elasticity_tensor = compute_elasticity_tensor(strain_tensor, stress_tensor=stress_tensor)
+stress_tensor = read_stress_from_outputs(output_file_type=None, aims_out_file=False)
+# elasticity_tensor = compute_elasticity_tensor(strain_tensor, stress_tensor=stress_tensor)
 
-print('This is the computed elasticity tensor')
-print(elasticity_tensor)
+# print('This is the computed elasticity tensor')
+# print(elasticity_tensor)

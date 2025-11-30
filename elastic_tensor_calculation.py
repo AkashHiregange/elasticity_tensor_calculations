@@ -87,8 +87,8 @@ def read_stress_from_outputs(output_file_type=None,aims_out_file=False):
         return stress_tensor
 
     else:
-        print(f'There was an error reading the output file. The arguments passed to the function were'
-              f'{output_file_type=}, {aims_out_file=}')
+        raise Exception(f'There was an error reading the output file. The arguments passed to the function were '
+              f'{output_file_type=}, {aims_out_file=}. Make sure one of them is set to find an output file.')
 
 
 def compute_elasticity_tensor(strain_tensor,stress_tensor,write_elasticity_tensor=True,write_output=True):
