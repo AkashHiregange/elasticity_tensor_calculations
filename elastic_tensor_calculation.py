@@ -31,35 +31,43 @@ def read_stress_from_outputs(aims_out_file=True):
             if os.path.isdir(f'{home}/{defor}'):
                 for file in os.listdir(f'{home}/{defor}'):
                     if file.endswith('.out'):
-                        f = open(f'{home}/{defor}/{file}', 'r')
-                        # print(f'{home}/{defor}/')
-                        # print('reading')
-                        stress = []
-                        # manually searching for stress components in aims.out file. Hopefully there is a better way to do it.
-                        lines = f.readlines()
-                        search_str = '  |                    Cartesian components [eV/A**3]                 |\n'
-                        if search_str in lines:
-                            # print(lines.index(search_str))
-                            index = lines.index(search_str)
-                            stress.append(float(lines[index + 4].split()[2]))
-                            stress.append(float(lines[index + 4].split()[3]))
-                            stress.append(float(lines[index + 4].split()[4]))
-                            stress.append(float(lines[index + 5].split()[2]))
-                            stress.append(float(lines[index + 5].split()[3]))
-                            stress.append(float(lines[index + 5].split()[4]))
-                            stress.append(float(lines[index + 6].split()[2]))
-                            stress.append(float(lines[index + 6].split()[3]))
-                            stress.append(float(lines[index + 6].split()[4]))
-
-                        try:
-                            stress = np.array(stress).reshape(3,3)
-                            stress_list.append(stress)
-                            # print(stress)
-                            f.close()
-                        except Exception as e:
-                            print('Error encountered. See the message below')
-                            print(e)
-                            f.close()
+                        atoms = read(f'{home}/{defor}/{file}')
+                        print(defor)
+                        print(atoms)
+                        atoms.write(f'{home}/{defor}/deform.traj')
+                        atom = read(f'{home}/{defor}/deform.traj')
+                        print(atom)
+                        stress = atom.get_stress(voigt=False)
+                        stress_list.append(stress)
+                        # f = open(f'{home}/{defor}/{file}', 'r')
+                        # # print(f'{home}/{defor}/')
+                        # # print('reading')
+                        # stress = []
+                        # # manually searching for stress components in aims.out file. Hopefully there is a better way to do it.
+                        # lines = f.readlines()
+                        # search_str = '  |                    Cartesian components [eV/A**3]                 |\n'
+                        # if search_str in lines:
+                        #     # print(lines.index(search_str))
+                        #     index = lines.index(search_str)
+                        #     stress.append(float(lines[index + 4].split()[2]))
+                        #     stress.append(float(lines[index + 4].split()[3]))
+                        #     stress.append(float(lines[index + 4].split()[4]))
+                        #     stress.append(float(lines[index + 5].split()[2]))
+                        #     stress.append(float(lines[index + 5].split()[3]))
+                        #     stress.append(float(lines[index + 5].split()[4]))
+                        #     stress.append(float(lines[index + 6].split()[2]))
+                        #     stress.append(float(lines[index + 6].split()[3]))
+                        #     stress.append(float(lines[index + 6].split()[4]))
+                        #
+                        # try:
+                        #     stress = np.array(stress).reshape(3,3)
+                        #     stress_list.append(stress)
+                        #     # print(stress)
+                        #     f.close()
+                        # except Exception as e:
+                        #     print('Error encountered. See the message below')
+                        #     print(e)
+                        #     f.close()
 
         stress_tensor = np.array(stress_list)
 
