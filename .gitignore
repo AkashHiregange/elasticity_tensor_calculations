@@ -5,3 +5,4 @@ __pycache__/
 geometry*
 test_elasticity_calculation/
 test/defor*/
+test_mace_calc/defor*/
