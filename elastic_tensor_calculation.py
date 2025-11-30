@@ -24,21 +24,33 @@ def read_strain_tensor_from_pkl(pkl_file):
         strain_tensor = pickle.load(fp)
     return strain_tensor
 
-def read_stress_from_outputs(aims_out_file=True):
-    if aims_out_file:
+def read_stress_from_outputs(output_file_type=None,aims_out_file=False):
+    file_ext = ['.traj', '.xyz']
+    if output_file_type is not None:
+        if output_file_type in file_ext:
+            stress_list = []
+            for defor in os.listdir():
+                if os.path.isdir(f'{home}/{defor}'):
+                    for file in os.listdir(f'{home}/{defor}'):
+                        if file.endswith(output_file_type):
+                            atoms = read(f'{home}/{defor}/{file}')
+                            stress = atoms.get_stress(voigt=False)
+                            stress_list.append(stress)
+        else:
+            raise ValueError(
+                f'The file extension provided is not supported. Please make sure it is one of the following'
+                f'{file_ext}')
+
+        stress_tensor = np.array(stress_list)
+        return stress_tensor
+
+    elif aims_out_file:
         stress_list = []
         for defor in os.listdir():
             if os.path.isdir(f'{home}/{defor}'):
                 for file in os.listdir(f'{home}/{defor}'):
                     if file.endswith('.out'):
-                        atoms = read(f'{home}/{defor}/{file}')
-                        print(defor)
-                        print(atoms)
-                        atoms.write(f'{home}/{defor}/deform.traj')
-                        atom = read(f'{home}/{defor}/deform.traj')
-                        print(atom)
-                        stress = atom.get_stress(voigt=False)
-                        stress_list.append(stress)
+                        pass
                         # f = open(f'{home}/{defor}/{file}', 'r')
                         # # print(f'{home}/{defor}/')
                         # # print('reading')
@@ -72,6 +84,10 @@ def read_stress_from_outputs(aims_out_file=True):
         stress_tensor = np.array(stress_list)
 
         return stress_tensor
+
+    else:
+        print(f'There was an error reading the output file. The arguments passed to the function were'
+              f'{output_file_type=}, {aims_out_file=}')
 
 
 def compute_elasticity_tensor(strain_tensor,stress_tensor,write_elasticity_tensor=True,write_output=True):
