@@ -7,7 +7,7 @@ from ase.io.trajectory import Trajectory
 from ase.constraints import ExpCellFilter
 from mace.calculators import mace_mp
 
-crys = read('CoO_RS_NM_pri_Opt_rSCAN.traj')
+crys = read('Co_metal_Opt_rSCAN_12x12x12.traj')
 
 calc = mace_mp(model='large', device='cpu', default_dtype='float64')
 
@@ -17,7 +17,7 @@ ecf = ExpCellFilter(crys)
 
 # Setup optimisation
 dynamics = BFGS(ecf)
-traj = Trajectory(f'CoO_Opt_mace_mp.traj', 'w', crys)
+traj = Trajectory(f'Co_Opt_mace_mp.traj', 'w', crys)
 dynamics.attach(traj)
 
 # Run optimisation
