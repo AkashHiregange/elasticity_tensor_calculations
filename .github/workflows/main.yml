@@ -48,21 +48,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install --upgrade ase
-        #Upgrading Catlearn to the most recent version 
-        python -m pip install https://github.com/SUNCAT-Center/CatLearn/archive/refs/heads/master.zip
-        python -m pip install --upgrade ase-gpatom
         python -m pip install --upgrade pytest
         python -m pip install --upgrade pytest-cov
         python -m pip install --upgrade pymatgen
-        # Removing as presumably MACE will automatically install dependencies
-        # python -m pip install torch torchvision torchaudio
-        
-        # Installing different mace versions for different versions of Python as MACE > 0.3.4 fails on Python 3.7
-        if [[ "${{ matrix.python-version }}" == "3.7" ]]; then
-            pip install mace-torch==0.3.4
-        else
-            pip install --upgrade mace-torch
-        fi
         
         # Debug
         python -m pip freeze
