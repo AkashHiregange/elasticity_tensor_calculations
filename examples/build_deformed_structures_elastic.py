@@ -20,15 +20,16 @@ def test_get_deformed_structures():
 
     # example of MACE-MP calculation on the deformed structures. Uncomment the lines below if you want to test it.
     # make sure MACE-MP is installed :)
-    # import os
-    # for defor in os.listdir(example_path):
-    #     if os.path.isdir(f'{example_path}/{defor}'):
-    #         atoms = read(f'{example_path}/{defor}/geometry.in')
-    #         from mace.calculators import mace_mp
-    #         calc = mace_mp(model='large', device='cpu', default_dtype='float64')
-    #         atoms.set_calculator(calc)
-    #         print(f'{defor}, {atoms.get_potential_energy()}')
-    #         atoms.write(f'{example_path}/{defor}/{defor}.xyz')
+    from mace.calculators import mace_mp
+    import os
+    for defor in os.listdir(example_path):
+        if os.path.isdir(f'{example_path}/{defor}'):
+            atoms = read(f'{example_path}/{defor}/geometry.in')
+            from mace.calculators import mace_mp
+            calc = mace_mp(model='large', device='cpu', default_dtype='float64')
+            atoms.set_calculator(calc)
+            print(f'{defor}, {atoms.get_potential_energy()}')
+            atoms.write(f'{example_path}/{defor}/{defor}.xyz')
 
     #### Assertion test for save ####
 
