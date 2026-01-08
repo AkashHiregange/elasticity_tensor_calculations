@@ -68,7 +68,7 @@ jobs:
         # echo "::set-env name=PYTHONPATH::/home/runner/work/carmm/carmm"
         #
         # Example new implementation from: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
-        echo "PYTHONPATH=/home/runner/work/elasticity_tensor_calculations:$PYTHONPATH" >> $GITHUB_ENV
+        echo "PYTHONPATH=/home/runner/work/elasticity_tensor_calculations/elasticity_tensor_calculations:$PYTHONPATH" >> $GITHUB_ENV
 
     # Runs a set of commands using the runners shell
     # Updated to run on pytest so we might be able to export data
