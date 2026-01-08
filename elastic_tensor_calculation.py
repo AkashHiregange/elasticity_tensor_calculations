@@ -2,7 +2,7 @@ import os
 from ase.io import read
 import pickle
 import numpy as np
-from pymatgen.analysis.elasticity import  diff_fit
+from pymatgen.analysis.elasticity import diff_fit
 from pymatgen.io.ase import AseAtomsAdaptor
 from pymatgen.analysis.elasticity import stress
 from pymatgen.core.structure import Structure
