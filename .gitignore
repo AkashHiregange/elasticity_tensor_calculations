@@ -4,5 +4,5 @@ phonopy_disp.yaml
 __pycache__/
 geometry*
 test_elasticity_calculation/
-test/defor*/
-test_mace_calc/defor*/
+test/
+test_mace_calc/
