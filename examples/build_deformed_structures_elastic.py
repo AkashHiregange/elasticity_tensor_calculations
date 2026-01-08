@@ -6,8 +6,8 @@ In this example, we will generate the deformed structures for Cobalt bulk metal 
 
 def test_get_deformed_structures():
     import sys
-    sys.path.append(r"C:\Users\\akash\OneDrive - Cardiff University\Desktop\elasticity_tensor_calculations")
-    from get_deformed_structures_for_elasticity_tensor import generate_deformed_strutures, create_files_and_directories
+    # sys.path.append(r"C:\Users\\akash\OneDrive - Cardiff University\Desktop\elasticity_tensor_calculations")
+    from elasticity.get_deformed_structures_for_elasticity_tensor import generate_deformed_strutures, create_files_and_directories
 
     #from carmm.build.get_deformed_structures_for_elasticity_tensor import generate_deformed_strutures, create_files_and_directories
     from ase.io import read
