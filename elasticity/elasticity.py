@@ -137,7 +137,9 @@ def diff_fit_local(strains, stresses, eq_stress=None, order=2, tol: float = 1e-1
     import numpy as np
 
     strain_state_dict = get_strain_state_dict(strains, stresses, eq_stress=eq_stress, tol=tol, add_eq=True, sort=True)
+    print(f'{strain_state_dict=}')
     v_subs = np.vectorize(subs)
+    print(f'{v_subs=}')
     # Collect derivative data
     c_list = []
     dei_dsi = np.zeros((order - 1, 6, len(strain_state_dict)))
@@ -146,8 +148,11 @@ def diff_fit_local(strains, stresses, eq_stress=None, order=2, tol: float = 1e-1
         for _ord in range(1, order):
             coef = get_diff_coeff(hvec, _ord)
             dei_dsi[_ord - 1, :, idx] = np.dot(coef, data["stresses"])
+    print(f'{dei_dsi=}')
 
     m, _absent = generate_pseudo(list(strain_state_dict), order)
+    print(f'{m=}')
+    print(f'{_absent=}')
     for _ord in range(1, order):
         cvec, carr = get_symbol_list(_ord + 1)
         svec = np.ravel(dei_dsi[_ord - 1].T)
@@ -200,8 +205,8 @@ def compute_elasticity_tensor(strain_tensor,stress_tensor,path=None,write_elasti
     from pymatgen.analysis.elasticity import diff_fit
     import os
  
-    elasticity_tensor = diff_fit(strain_tensor, stress_tensor, order=2, tol=tol)
-    #elasticity_tensor = diff_fit_local(strain_tensor, stress_tensor, order=2)
+    # elasticity_tensor = diff_fit(strain_tensor, stress_tensor, order=2, tol=tol)
+    elasticity_tensor = diff_fit_local(strain_tensor, stress_tensor, order=2)
     #print(np.unique(np.array(elasticity_tensor[0]), return_index=True)[0] * 160.2716621)
 
     if path is None:
