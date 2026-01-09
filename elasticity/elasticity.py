@@ -148,7 +148,7 @@ def diff_fit_local(strains, stresses, eq_stress=None, order=2, tol: float = 1e-1
         for _ord in range(1, order):
             coef = get_diff_coeff(hvec, _ord)
             dei_dsi[_ord - 1, :, idx] = np.dot(coef, data["stresses"])
-    print(f'{dei_dsi=}')
+    print(f'dei_dsi: {np.sum(dei_dsi)}')
 
     m, _absent = generate_pseudo(list(strain_state_dict), order)
     print(f'{m=}')
