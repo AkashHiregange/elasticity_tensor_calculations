@@ -5,7 +5,7 @@ def test_analyse_elasticity():
     import numpy as np
     import sys
     # sys.path.append(r"C:\Users\\akash\OneDrive - Cardiff University\Desktop\elasticity_tensor_calculations")
-    from elasticity.elasticity import read_strain_tensor_from_pkl, read_stress_from_outputs, compute_elasticity_tensor
+    from elasticity import read_strain_tensor_from_pkl, read_stress_from_outputs, compute_elasticity_tensor
     example_path = 'data/elasticity_tensor_workflow/'
     
     # These are just checks that the file read functionality is valid
@@ -27,7 +27,7 @@ def test_analyse_elasticity():
     assert(np.isclose(elasticity_tensor[0,0,0,0],2.9813036535009156))
 
     # Manually save files to check functionality
-    from elasticity.elasticity import write_elasticity_output, write_elasticity_tensor_pickle
+    from elasticity import write_elasticity_output, write_elasticity_tensor_pickle
     import os
 
     write_elasticity_output(stress_tensor, strain_tensor, elasticity_tensor, example_path)
