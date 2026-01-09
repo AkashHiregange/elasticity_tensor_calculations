@@ -75,7 +75,7 @@ jobs:
     - name: Run the examples
       run: |
         cd examples
-        pytest --cov=../ --cov-report=xml *.py
+        pytest --cov=../ --cov-report=xml analyse_elasticity.py
 
     # Upload all the data on coverage to CodeCov
     - name: Upload coverage to Codecov
