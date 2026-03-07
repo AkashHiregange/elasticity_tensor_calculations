@@ -137,9 +137,9 @@ def diff_fit_local(strains, stresses, eq_stress=None, order=2, tol: float = 1e-1
     import numpy as np
 
     strain_state_dict = get_strain_state_dict(strains, stresses, eq_stress=eq_stress, tol=tol, add_eq=True, sort=True)
-    print(f'{strain_state_dict=}')
+    #print(f'{strain_state_dict=}')
     v_subs = np.vectorize(subs)
-    print(f'{v_subs=}')
+    #print(f'{v_subs=}')
     # Collect derivative data
     c_list = []
     dei_dsi = np.zeros((order - 1, 6, len(strain_state_dict)))
@@ -151,8 +151,8 @@ def diff_fit_local(strains, stresses, eq_stress=None, order=2, tol: float = 1e-1
     print(f'dei_dsi: {np.sum(dei_dsi)}')
 
     m, _absent = generate_pseudo(list(strain_state_dict), order)
-    print(f'{m=}')
-    print(f'{_absent=}')
+    #print(f'{m=}')
+    #print(f'{_absent=}')
     for _ord in range(1, order):
         cvec, carr = get_symbol_list(_ord + 1)
         svec = np.ravel(dei_dsi[_ord - 1].T)
