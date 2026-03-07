@@ -24,6 +24,7 @@ def test_analyse_elasticity():
     # Troublesome assertions
     print(np.sum(elasticity_tensor))
     print(elasticity_tensor[0,0,0,0])
+    print('hello')
     assert np.isclose(np.sum(elasticity_tensor), 62.016154850659255)
     assert(np.isclose(elasticity_tensor[0,0,0,0],-0.4981115107598163))
 
