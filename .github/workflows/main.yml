@@ -21,13 +21,20 @@ jobs:
     # Therefore, need different os versions for different Python versions.
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
+    
+    env:
+      OPENBLAS_NUM_THREADS: 1
+      OMP_NUM_THREADS: 1
+      MKL_NUM_THREADS: 1
+      NUMEXPR_NUM_THREADS: 1
+    
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
-            python-version: '3.7'
-          - os: ubuntu-24.04
-            python-version: '3.8'
+          #- os: ubuntu-22.04
+          #  python-version: '3.7'
+          #- os: ubuntu-24.04
+          #  python-version: '3.8'
           - os: ubuntu-24.04
             python-version: '3.10'
         
