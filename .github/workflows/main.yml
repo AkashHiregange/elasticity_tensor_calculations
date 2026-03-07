@@ -67,6 +67,7 @@ jobs:
       run: |
         # This is debug, as setting the Python Path wasn't obvious.
         echo $PWD
+        echo $OPENBLAS_NUM_THREADS
         # ls -lrt
         # env | sort
         #
