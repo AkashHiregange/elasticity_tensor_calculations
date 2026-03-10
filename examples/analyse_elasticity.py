@@ -9,7 +9,7 @@ def test_analyse_elasticity():
     example_path = 'data/elasticity_tensor_workflow/'
     
     # These are just checks that the file read functionality is valid
-    strain_tensor = read_strain_tensor_from_pkl(example_path+'strain_tensor.pkl')
+    strain_tensor = read_strain_tensor_from_pkl(example_path+'strain_tensor.npz')
     assert strain_tensor.shape == (12, 3, 3)
     assert np.isclose(np.sum(strain_tensor), 0.36) 
  
@@ -26,7 +26,7 @@ def test_analyse_elasticity():
     print(elasticity_tensor[0,0,0,0])
     print('hello')
     assert np.isclose(np.sum(elasticity_tensor), 62.016154850659255)
-    assert(np.isclose(elasticity_tensor[0,0,0,0],-0.4981115107598163))
+    assert np.isclose(elasticity_tensor[0,0,0,0],-0.4981115107598163)
 
     # Manually save files to check functionality
     from elasticity import write_elasticity_output, write_elasticity_tensor_pickle
@@ -36,7 +36,7 @@ def test_analyse_elasticity():
     assert(os.path.exists(f'{example_path}/elasticity_tensor_calculation_output.txt')) # check for elasticity tensor pkl file
 
     write_elasticity_tensor_pickle(elasticity_tensor, example_path)
-    assert(os.path.exists(f'{example_path}/elasticity_tensor.pkl')) # check for output txt file
+    assert(os.path.exists(f'{example_path}/elasticity_tensor.npz')) # check for output txt file
     ########
 
 # Run the example

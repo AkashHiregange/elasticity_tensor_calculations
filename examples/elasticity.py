@@ -20,9 +20,12 @@ def read_strain_tensor_from_pkl(pkl_file_path):
     - This function assumes the pickle file was created using the generate_deformed_structures() function with
       write_strain=True.
     """
-    import pickle
-    with open(pkl_file_path, 'rb') as fp:
-        strain_tensor = pickle.load(fp)
+    # import pickle
+    import numpy as np
+    data = np.load(pkl_file_path)
+    strain_tensor = data["strain_tensor"]
+    # with open(pkl_file_path, 'rb') as fp:
+    #     strain_tensor = pickle.load(fp)
     return strain_tensor
 
 def read_stress_from_outputs(path=None, output_file_type='.out'):
@@ -288,11 +291,13 @@ def write_elasticity_tensor_pickle(elasticity_tensor, path):
         This function writes output to disk.
     """
 
-    import pickle
     import numpy as np
 
-    with open(f'{path}/elasticity_tensor.pkl', 'wb') as fp:
-        pickle.dump(np.array(elasticity_tensor[0]), fp)
+    np.savez(
+        f"{path}/elasticity_tensor.npz",
+        strain_tensor=np.array(elasticity_tensor[0]))
+    # with open(f'{path}/elasticity_tensor.pkl', 'wb') as fp:
+    #     pickle.dump(np.array(elasticity_tensor[0]), fp)
 
 
 
